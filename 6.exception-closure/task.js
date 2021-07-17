@@ -2,7 +2,7 @@ function parseCount(count) {
     let parsedCount = Number.parseInt(count);
       
     if (isNaN(parsedCount)) {
-      throw parseError = new Error('Невалидное значение');
+      throw new Error('Невалидное значение');
     }
     return parsedCount;
 }
@@ -22,8 +22,8 @@ class Triangle {
         this.second = second,
         this.third = third
       } else {
-       const triangleError = new Error('Треугольник с такими сторонами не существует');
-       throw triangleError;
+        throw new Error('Треугольник с такими сторонами не существует');
+        
       }
     }
     getPerimeter () {
@@ -31,7 +31,7 @@ class Triangle {
     };
 
     getArea () {
-        let halfPerimeter  = 0.5 * (this.first + this.second +this.third),
+        let halfPerimeter  = 0.5 * this.getPerimeter(),
           areaHeron = Math.sqrt(halfPerimeter * (halfPerimeter - this.first) * (halfPerimeter - this.second) * (halfPerimeter - this.third));
     
         return +(areaHeron.toFixed(3)); 
