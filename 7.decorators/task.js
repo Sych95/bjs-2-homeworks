@@ -7,44 +7,50 @@ function cachingDecoratorNew(func) {
       if (idx !== -1 ) { // если элемент не найден
           console.log("Из кэша: " + cache[idx].value )// индекс нам известен, по индексу в массиве лежит объект, как получить нужное значение?
           return "Из кэша: " + cache[idx].value;
-      } else {
-          let result = func(...args); // в кэше результата нет - придётся считать
-          cache.push({'hash': hash, 'value': result }) ; // добавляем элемент с правильной структурой
-          if (cache.length > 5) { 
-            cache.splice(0,1) 
-          }
-          console.log("Вычисляем: " + result);
-          return "Вычисляем: " + result;  
       }
-  }
+      let result = func(...args); // в кэше результата нет - придётся считать
+      cache.push({'hash': hash, 'value': result }) ; // добавляем элемент с правильной структурой
+      if (cache.length > 5) { 
+        cache.splice(0,1) 
+      }
+      console.log("Вычисляем: " + result);
+      return "Вычисляем: " + result;  
+    }
   return wrapper;
   }
 
 
 function debounceDecoratorNew(func, ms) {
-  let check = false, count;
+  let check = false, count = 0;
 
-  return function () {
+  function wrapper (...args) {
     if(check === false) {
       check = true;
-      setTimeout(() => check = false, ms);
-      func();
-      console.log(new Date)
+      setTimeout(() => {
+        check = false;
+        func(...args);
+      }, ms);
     }
   }
+  return wrapper;
 } 
 
 function debounceDecorator2(func,ms) {
-  let check = false, count = 0;
-  setTimeout(()=> console.log(count), 10000)
+  let check = false;
 
-  return function () {
-    count +=1;
+  setTimeout(()=> console.log(), 10000)
+
+  function wrapper(...args) {
+    wrapper.count += 1;
     if(check === false) {
       check = true;
-      setTimeout(() => check = false, ms);
-      func();
-      console.log(new Date)
+      setTimeout(() => {
+        check = false;
+        func(...args);
+      }, ms);
     }
+    
   }
+  wrapper.count = 0;
+  return wrapper;
 }
